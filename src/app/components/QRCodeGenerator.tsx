@@ -263,13 +263,18 @@ const QRCodeGenerator: React.FC = () => {
         data = textInput;
         break;
       case "image":
-        data = imageDataUrl;
+        data = imageDataUrl ? imageDataUrl : "";
         break;
       default:
         data = "";
     }
     setQrData(data);
-    generateQRCode(data);
+    // Only generate QR code for image if imageDataUrl is present
+    if (activeTab !== "image" || (activeTab === "image" && imageDataUrl)) {
+      generateQRCode(data);
+    } else if (qrContainerRef.current) {
+      qrContainerRef.current.innerHTML = "";
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, urlInput, textInput, imageDataUrl]);
 
